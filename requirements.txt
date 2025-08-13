@@ -11,4 +11,9 @@ tiktoken==0.4.0
 
 # uncomment to use instructor embeddings
 # InstructorEmbedding==1.0.1
-# sentence-transformers==2.2.2
+# sentence-transformers==2.2.2langchain==0.3.27
+langchain-community==0.3.27
+langchain-core==0.3.74
+langchain-text-splitters==0.3.9
+python-dotenv==1.1.1
+tiktoken==0.11.0
