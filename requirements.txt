@@ -1,19 +1,36 @@
-langchain==0.0.184
-PyPDF2==3.0.1
-python-dotenv==1.0.0
-streamlit==1.18.1
-openai==0.27.6
-faiss-cpu==1.7.4
-altair==4
-tiktoken==0.4.0
-# uncomment to use huggingface llms
-# huggingface-hub==0.14.1
+############################################################
+# Cleaned requirements: remove duplicate/conflicting entries
+# Keep either monolithic langchain OR modular packages.
+# Your code uses legacy import style, so we keep monolithic.
+# If you later migrate, remove 'langchain' and add the modular ones.
+############################################################
 
-# uncomment to use instructor embeddings
+PyPDF2==3.0.1
+python-dotenv==1.1.1          # single version (removed 1.0.0 duplicate)
+streamlit==1.32.0             # newer Streamlit (optional; adjust if needed)
+openai==0.27.6                # matches older langchain versions you used
+langchain==0.0.354            # newer monolithic that still supports older imports
+faiss-cpu==1.7.4              # may fail on py3.12; see notes below
+tiktoken==0.5.2               # unify tiktoken version (remove 0.4.0/0.11.0 conflict)
+altair==4.2.2
+
+# Optional extras (commented out until needed)
+# huggingface-hub==0.20.3
 # InstructorEmbedding==1.0.1
-# sentence-transformers==2.2.2langchain==0.3.27
-langchain-community==0.3.27
-langchain-core==0.3.74
-langchain-text-splitters==0.3.9
-python-dotenv==1.1.1
-tiktoken==0.11.0
+# sentence-transformers==2.7.0
+
+############################################################
+# Notes:
+# 1. If faiss-cpu fails to build on Python 3.12, try:
+#    pip install faiss-cpu==1.8.0.post1
+#    or use Python 3.11 for better binary wheel availability.
+# 2. If tiktoken build fails, upgrade pip & setuptools first:
+#    pip install --upgrade pip setuptools wheel
+# 3. If you decide to move to modular langchain packages, replace:
+#    langchain==0.0.354
+#    with (example versions):
+#    langchain-core==0.3.74
+#    langchain-community==0.3.27
+#    langchain-text-splitters==0.3.9
+#    and update import paths accordingly.
+############################################################
