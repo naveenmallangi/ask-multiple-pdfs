@@ -3,12 +3,14 @@ from dotenv import load_dotenv
 from PyPDF2 import PdfReader
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.embeddings import OpenAIEmbeddings, HuggingFaceInstructEmbeddings
-from langchain.vectorstores import FAISS
+# from langchain.vectorstores import FAISS
+from langchain.vectorstores import Chroma
 from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 from htmlTemplates import css, bot_template, user_template
 from langchain.llms import HuggingFaceHub
+from langchain.callbacks import get_openai_callback
 
 def get_pdf_text(pdf_docs):
     text = ""
@@ -33,7 +35,8 @@ def get_text_chunks(text):
 def get_vectorstore(text_chunks):
     embeddings = OpenAIEmbeddings()
     # embeddings = HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-xl")
-    vectorstore = FAISS.from_texts(texts=text_chunks, embedding=embeddings)
+    # vectorstore = FAISS.from_texts(texts=text_chunks, embedding=embeddings)
+    vectorstore=Chroma.from_texts(texts=text_chunks, embedding=embeddings)
     return vectorstore
 
 
@@ -66,7 +69,7 @@ def handle_userinput(user_question):
 
 def main():
     load_dotenv()
-    st.set_page_config(page_title="Chat with multiple PDFs",
+    st.set_page_config(page_title="Chat with multiple ٍٍٍٍٍِِِِِPDFs",
                        page_icon=":books:")
     st.write(css, unsafe_allow_html=True)
 
@@ -91,9 +94,11 @@ def main():
 
                 # get the text chunks
                 text_chunks = get_text_chunks(raw_text)
+                st.write(text_chunks)
 
                 # create vector store
                 vectorstore = get_vectorstore(text_chunks)
+                st.write(vectorstore)
 
                 # create conversation chain
                 st.session_state.conversation = get_conversation_chain(
